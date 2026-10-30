@@ -5,7 +5,12 @@ import { useState } from "react";
 import { Leaf, Search, Sun, Moon, Menu, X } from "lucide-react";
 import Link from "next/link";
 
-const links = ["Home", "Upcoming Events", "About", "Gallery"];
+const links = [
+  { name: "Home", href: "/" },
+  { name: "Upcoming Events", href: "/events" },
+  { name: "About", href: "/about" },
+  { name: "Gallery", href: "/gallery" },
+];
 
 const Navbar = () => {
   const [active, setActive] = useState("Home");
@@ -31,21 +36,22 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <ul className="hidden h-full items-center gap-7 md:flex lg:gap-8">
-          {links.map((link) => (
-            <li key={link} className="h-full">
-              <button
-                onClick={() => setActive(link)}
-                className={`relative flex h-full items-center text-[13px] font-medium transition-all duration-300
-                  ${
-                    active === link
-                      ? "text-[#8be37a] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:rounded-full after:bg-[#8be37a]"
-                      : "text-gray-300 hover:text-white"
-                  }`}
-              >
-                {link}
-              </button>
-            </li>
-          ))}
+         {links.map((link) => (
+  <li key={link.href} className="h-full">
+    <Link
+      href={link.href}
+      onClick={() => setActive(link.name)}
+      className={`relative flex h-full items-center text-[13px] font-medium transition-all duration-300
+        ${
+          active === link.name
+            ? "text-[#8be37a] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:rounded-full after:bg-[#8be37a]"
+            : "text-gray-300 hover:text-white"
+        }`}
+    >
+      {link.name}
+    </Link>
+  </li>
+))}
         </ul>
 
         {/* Right Actions */}
@@ -105,22 +111,22 @@ const Navbar = () => {
       {menuOpen && (
         <div className="border-t border-white/10 bg-[#021d18] px-6 py-5 md:hidden">
           <div className="flex flex-col gap-4">
-            {links.map((link) => (
-              <button
-                key={link}
-                onClick={() => {
-                  setActive(link);
-                  setMenuOpen(false);
-                }}
-                className={`text-left text-sm transition ${
-                  active === link
-                    ? "font-semibold text-[#8be37a]"
-                    : "text-gray-300 hover:text-white"
-                }`}
-              >
-                {link}
-              </button>
-            ))}
+           {links.map((link) => (
+  <li key={link.href} className="h-full">
+    <Link
+      href={link.href}
+      onClick={() => setActive(link.name)}
+      className={`relative flex h-full items-center text-[13px] font-medium transition-all duration-300
+        ${
+          active === link.name
+            ? "text-[#8be37a] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:rounded-full after:bg-[#8be37a]"
+            : "text-gray-300 hover:text-white"
+        }`}
+    >
+      {link.name}
+    </Link>
+  </li>
+))}
 
             <div className="my-1 border-t border-white/10" />
 
