@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+import { FieldSeparator } from "@/components/ui/field";
 
 const validatePassword = (password: string): string | null => {
   if (password.length < 6)
@@ -58,7 +59,7 @@ const RegisterPage = () => {
           email,
           password,
           image: photoURL || undefined,
-          callbackURL: "/dashboard",
+          callbackURL: "/login",
         });
 
       if (authError) {
@@ -72,7 +73,7 @@ const RegisterPage = () => {
 
       toast.success("Account created successfully!");
 
-      router.push("/dashboard");
+      router.push("/login");
       router.refresh();
 
     } catch (error) {
@@ -84,6 +85,14 @@ const RegisterPage = () => {
       setLoading(false);
     }
   };
+
+    const handelGoogleRegister = async () => {
+
+
+ const data = await authClient.signIn.social({
+    provider: "google",
+  });
+    }
 
   return (
     <section className="flex min-h-screen items-center justify-center bg-[#04241b] px-6 py-12">
@@ -166,6 +175,9 @@ const RegisterPage = () => {
             )}
           </div>
 
+  
+
+
           <Button
             type="submit"
             disabled={loading}
@@ -173,6 +185,40 @@ const RegisterPage = () => {
           >
             {loading ? "Creating account..." : "Register"}
           </Button>
+ <FieldSeparator className="my-5 [&_[data-slot=field-separator-content]]:bg-white">
+              Or
+            </FieldSeparator>
+          <Button
+              type="button"
+              variant="outline"
+                   onClick={handelGoogleRegister}
+              className="h-11 w-full gap-3 rounded-xl border-sky-100 bg-white text-slate-700 hover:bg-sky-50 hover:text-sky-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 48 48"
+                className="size-5"
+                aria-hidden="true"
+              >
+                <path
+                  fill="#EA4335"
+                  d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.05 13.22l7.98 6.19C11.96 13.72 17.48 9.5 24 9.5Z"
+                />
+                <path
+                  fill="#4285F4"
+                  d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.75 7.18l7.73 6C44.43 37.95 46.98 31.83 46.98 24.55Z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M10.03 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24 24 0 0 0 0 21.56l7.98-6.19Z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.15 1.45-4.89 2.3-8.18 2.3-6.52 0-12.04-4.22-13.97-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z"
+                />
+              </svg>
+              Sign up with Google
+            </Button>
 
         </form>
 
@@ -184,6 +230,7 @@ const RegisterPage = () => {
           >
             Login
           </Link>
+
         </p>
 
       </div>
