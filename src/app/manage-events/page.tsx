@@ -30,9 +30,7 @@ const ManageEventsPage = () => {
 
   const email = session?.user?.email;
 
-  const today = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Dhaka",
-  }).format(new Date());
+  const [today, setToday] = useState("");
 
   // Load only the events created by the logged-in user
   useEffect(() => {
@@ -50,6 +48,13 @@ const ManageEventsPage = () => {
         const data: Event[] = await res.json();
         data.sort((a, b) => a.eventDate.localeCompare(b.eventDate));
         setEvents(data);
+
+        // Today's date (Dhaka), used for the "Past" badge
+        setToday(
+          new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Dhaka" }).format(
+            new Date()
+          )
+        );
       } catch (error) {
         toast.error(
           error instanceof Error ? error.message : "Something went wrong."
@@ -69,7 +74,7 @@ const ManageEventsPage = () => {
       setDeleting(true);
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/events/${deleteId}?createdBy=${encodeURIComponent(email!)}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/events/${deleteId}?createdBy=${encodeURIComponent(email ?? "")}`,
         { method: "DELETE" }
       );
 
@@ -182,7 +187,7 @@ const ManageEventsPage = () => {
                     <span className="rounded-full bg-green-50 px-3 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-950 dark:text-green-400">
                       {event.eventType}
                     </span>
-                    {event.eventDate < today && (
+                    {today && event.eventDate < today && (
                       <span className="rounded-full bg-gray-100 px-3 py-0.5 text-xs font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
                         Past
                       </span>

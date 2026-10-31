@@ -1,7 +1,7 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import Image from "next/image";
 
 const eventTypes = [
   "Cleanup",
@@ -43,7 +42,7 @@ interface EventData extends EventFormData {
   createdAt?: string;
 }
 
-export default function EditEventPage() {
+function EditEventForm() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
 
@@ -175,7 +174,10 @@ export default function EditEventPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            ...formData,
+            createdBy: session?.user?.email,
+          }),
         }
       );
 
@@ -325,7 +327,8 @@ export default function EditEventPage() {
             {/* Image Preview */}
             {formData.image && (
               <div className="mt-4 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={formData.image}
                   alt="Event thumbnail preview"
                   className="h-48 w-full object-cover"
@@ -412,3 +415,19 @@ export default function EditEventPage() {
     </main>
   );
 }
+
+const EditEventPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center">
+          <Loader2 className="animate-spin text-green-600" />
+        </main>
+      }
+    >
+      <EditEventForm />
+    </Suspense>
+  );
+};
+
+export default EditEventPage;
