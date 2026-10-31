@@ -7,6 +7,8 @@ import {
   Globe,
 } from "lucide-react";
 import Image from "next/image";
+// ADDED: Link import for the Explore Events CTA (see comment below on usage).
+import Link from "next/link";
 
 const stats = [
   { icon: Calendar, value: "100+", label: "Events" },
@@ -82,7 +84,10 @@ const Hero = () => {
           {/* CTA Buttons */}
           <div className="mt-6 flex flex-wrap items-center gap-3">
 
-            <a
+            {/* CHANGED (lint error @next/next/no-html-link-for-pages): was an
+                 <a href="/events/"> which triggers a full page reload and
+                 fails `npm run lint` — Next <Link> does client navigation. */}
+            <Link
               href="/events"
               className="group flex items-center gap-2 rounded-full bg-[#8be37a] px-5 py-2.5 text-xs font-bold text-[#062b20] shadow-[0_0_20px_rgba(139,227,122,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#a0f08f]"
             >
@@ -91,7 +96,7 @@ const Hero = () => {
                 size={16}
                 className="transition-transform group-hover:translate-x-1"
               />
-            </a>
+            </Link>
 
             <a
               href="/about"

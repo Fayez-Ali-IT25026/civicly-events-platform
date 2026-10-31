@@ -95,11 +95,19 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return
-    onSelect(api)
+    // CHANGED (lint error react-hooks/set-state-in-effect): the initial
+    // `onSelect(api)` used to run synchronously in this effect body and
+    // called setState directly, failing `npm run lint`. Deferring it to a
+    // microtask keeps the buttons in sync with embla's initial position
+    // while keeping the effect body setState-free.
+    queueMicrotask(() => onSelect(api))
     api.on("reInit", onSelect)
     api.on("select", onSelect)
 
     return () => {
+      // CHANGED: cleanup previously only removed the "select" listener;
+      // the "reInit" listener leaked on unmount/re-mount.
+      api?.off("reInit", onSelect)
       api?.off("select", onSelect)
     }
   }, [api, onSelect])
