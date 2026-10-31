@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { connection } from "next/server";
 import Link from "next/link";
 import { MapPin, CalendarDays, ArrowRight } from "lucide-react";
 
@@ -17,6 +18,9 @@ const arrowClass =
   "static! size-10 rounded-full border-zinc-300 bg-white text-zinc-500 hover:text-zinc-900 dark:border-white/20 dark:bg-transparent dark:text-gray-300 dark:hover:text-white";
 
 const getEvents = async (): Promise<Event[]> => {
+  // Wait for a real request, so this fetch is not run during prerender
+  await connection();
+
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upcoming-events`, {
       cache: "no-store",

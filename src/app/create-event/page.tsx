@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,6 +20,12 @@ const eventTypes = [
   "Other",
 ];
 
+// Today's date in Dhaka (yyyy-mm-dd). Only called in effects and handlers.
+const getTodayInDhaka = () =>
+  new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Dhaka" }).format(
+    new Date()
+  );
+
 export default function CreateEventPage() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
@@ -37,9 +42,14 @@ export default function CreateEventPage() {
     eventDate: "",
   });
 
-  const today = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Dhaka",
-  }).format(new Date());
+  // The date input's "min" is set after mount, so no past date can be picked
+  const dateRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (dateRef.current) {
+      dateRef.current.min = getTodayInDhaka();
+    }
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -69,7 +79,7 @@ export default function CreateEventPage() {
       return;
     }
 
-    if (formData.eventDate <= today) {
+    if (formData.eventDate <= getTodayInDhaka()) {
       toast.error("Please select a future date.");
       return;
     }
@@ -294,7 +304,7 @@ export default function CreateEventPage() {
                   name="eventDate"
                   value={formData.eventDate}
                   onChange={handleChange}
-                  min={today}
+                  ref={dateRef}
                   required
                   className="w-full rounded-lg border bg-transparent py-3 pl-10 pr-4 outline-none focus:border-green-600"
                 />

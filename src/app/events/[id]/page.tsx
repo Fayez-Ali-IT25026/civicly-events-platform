@@ -1,4 +1,4 @@
-
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import JoinEventButton from "./JoinEventButton";
 
 import type { Event } from "@/types/event";
@@ -38,7 +39,7 @@ async function getEvent(id: string): Promise<Event | null> {
   }
 }
 
-export default async function EventDetailsPage({ params }: Props) {
+async function EventDetails({ params }: Props) {
   const { id } = await params;
 
   const event = await getEvent(id);
@@ -225,3 +226,23 @@ export default async function EventDetailsPage({ params }: Props) {
     </main>
   );
 }
+
+const EventDetailsPage = ({ params }: Props) => {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+          <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 md:px-6">
+            <Skeleton className="h-96 w-full rounded-2xl" />
+            <Skeleton className="h-10 w-2/3" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+        </main>
+      }
+    >
+      <EventDetails params={params} />
+    </Suspense>
+  );
+};
+
+export default EventDetailsPage;

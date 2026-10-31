@@ -1,8 +1,13 @@
-
+import { Suspense } from "react";
+import { connection } from "next/server";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Event } from "@/types/event";
 import EventCard from "@/components/events/EventCard";
 
 async function getEvents(): Promise<Event[]> {
+  // Wait for a real request, so this fetch is not run during prerender
+  await connection();
+
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/events`,
@@ -31,7 +36,7 @@ function getTodayInDhaka() {
   }).format(new Date());
 }
 
-export default async function UpcomingEventsPage() {
+async function UpcomingEvents() {
   const allEvents = await getEvents();
 
   const today = getTodayInDhaka();
@@ -91,3 +96,23 @@ export default async function UpcomingEventsPage() {
     </main>
   );
 }
+
+const UpcomingEventsPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-gray-50 py-16 dark:bg-gray-950">
+          <div className="mx-auto grid max-w-7xl gap-7 px-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((item) => (
+              <Skeleton key={item} className="h-96 w-full rounded-2xl" />
+            ))}
+          </div>
+        </main>
+      }
+    >
+      <UpcomingEvents />
+    </Suspense>
+  );
+};
+
+export default UpcomingEventsPage;
