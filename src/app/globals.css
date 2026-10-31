@@ -4,9 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-body{
-  background-color: white;
-}
 
 @theme inline {
   --font-heading: var(--font-sans);
@@ -130,4 +127,57 @@ body{
   html {
     @apply font-sans;
   }
+}
+
+
+
+
+
+
+
+
+/* ---------- Add this at the very bottom of src/app/globals.css ---------- */
+
+/* Dark mode for the colors that were written by hand (not shadcn tokens).
+   :where() keeps these weaker than any explicit dark: class on a component. */
+/* @layer utilities {
+  :where(.dark) .bg-white { background-color: var(--card); }
+  :where(.dark) .bg-gray-50 { background-color: var(--background); }
+  :where(.dark) .bg-gray-100 { background-color: oklch(0.269 0 0); }
+  :where(.dark) .bg-green-50 { background-color: rgb(34 197 94 / 0.12); }
+  :where(.dark) .bg-\[\#f7f5ee\] { background-color: #0a1d17; }
+
+  :where(.dark) .text-\[\#062b20\] { color: #ffffff; }
+  :where(.dark) .text-gray-900 { color: #ffffff; }
+  :where(.dark) .text-gray-700 { color: #d1d5db; }
+  :where(.dark) .text-gray-600 { color: #cbd5e1; }
+  :where(.dark) .text-gray-500 { color: #9ca3af; }
+  :where(.dark) .text-green-700 { color: #8be37a; }
+
+  :where(.dark) .border-gray-100,
+  :where(.dark) .border-gray-200,
+  :where(.dark) .border-gray-300 { border-color: rgb(255 255 255 / 0.12); }
+} */
+
+
+/* ---------- Add this at the very bottom of src/app/globals.css ---------- */
+
+/* Dark mode for the colors that were written by hand (not shadcn tokens).
+   :where() keeps these weaker than any explicit dark: class on a component. */
+@layer utilities {
+  :where(.dark) .bg-white { background-color: var(--card); }
+  :where(.dark) .bg-gray-50 { background-color: var(--background); }
+  :where(.dark) .bg-gray-100 { background-color: oklch(0.269 0 0); }
+  :where(.dark) .bg-green-50 { background-color: rgb(34 197 94 / 0.12); }
+  :where(.dark) .bg-\[\#f7f5ee\] { background-color: #0a1d17; }
+
+  :where(.dark) .text-gray-900 { color: #ffffff; }
+  :where(.dark) .text-gray-700 { color: #d1d5db; }
+  :where(.dark) .text-gray-600 { color: #cbd5e1; }
+  :where(.dark) .text-gray-500 { color: #9ca3af; }
+  :where(.dark) .text-green-700 { color: #8be37a; }
+
+  :where(.dark) .border-gray-100,
+  :where(.dark) .border-gray-200,
+  :where(.dark) .border-gray-300 { border-color: rgb(255 255 255 / 0.12); }
 }

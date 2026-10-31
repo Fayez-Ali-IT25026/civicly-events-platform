@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const Newsletter = () => {
   return (
-    <section className="bg-[#f7f5ee] px-6 py-10">
+    <section className="bg-[#f7f5ee] px-6 py-10 dark:bg-[#0a1d17]">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 rounded-3xl bg-gradient-to-r from-[#04241b] to-[#0a3d2e] px-8 py-8 text-white md:flex-row md:justify-between">
         <div className="flex items-center gap-4">
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#8be37a]/15 ring-1 ring-[#8be37a]/30">

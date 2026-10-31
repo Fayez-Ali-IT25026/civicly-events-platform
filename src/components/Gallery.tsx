@@ -37,14 +37,14 @@ const photos: Photo[] = [
 
 const Gallery = () => {
   return (
-    <section className="bg-[#f7f5ee] px-6 pt-16">
+    <section className="bg-[#f7f5ee] px-6 pt-16 dark:bg-[#0a1d17]">
       <div className="mx-auto max-w-7xl">
         <div className="flex items-end justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-green-700">
               Our Gallery
             </p>
-            <h2 className="mt-2 text-4xl font-bold text-[#062b20]">
+            <h2 className="mt-2 text-4xl font-bold text-[#062b20] dark:text-white">
               Moments That Matter
             </h2>
             <p className="mt-2 text-sm text-gray-600">
@@ -53,7 +53,7 @@ const Gallery = () => {
           </div>
           <a
             href="#"
-            className="hidden items-center gap-1 text-sm font-medium text-[#062b20] hover:underline sm:flex"
+            className="hidden items-center gap-1 text-sm font-medium text-[#062b20] hover:underline dark:text-white sm:flex"
           >
             View More Photos <ArrowRight size={14} />
           </a>

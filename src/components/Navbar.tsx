@@ -34,6 +34,11 @@ import {
 } from "@/components/ui/avatar";
 
 import { Button } from "@/components/ui/button";
+import ThemeToggle from "@/components/ThemeToggle";
+
+
+
+
 
 // Main navigation links
 const links = [
@@ -262,7 +267,7 @@ const Navbar = () => {
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-4 md:flex">
-
+<ThemeToggle />
           {/* Search */}
           <button
             type="button"
@@ -300,19 +305,10 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button
-          type="button"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-          aria-expanded={menuOpen}
-          className="text-white md:hidden"
-        >
-          {menuOpen ? (
-            <X size={24} />
-          ) : (
-            <Menu size={24} />
-          )}
-        </button>
+       <div className="flex items-center gap-3 md:hidden">
+  <ThemeToggle />
+  {/* the existing menu toggle <button> goes here, and remove "md:hidden" from its className */}
+</div>
       </nav>
 
       {/* Mobile Menu */}

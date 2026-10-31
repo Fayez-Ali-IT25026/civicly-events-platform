@@ -4,12 +4,32 @@
 // ("Cannot find module '@/components/ui/sonner'"), which returned HTTP 500 on
 // EVERY page. This is the standard shadcn/ui sonner wrapper — sonner v2 injects
 // its own styles, so no CSS import is needed.
+// "use client"
+
+// import { Toaster as Sonner, type ToasterProps } from "sonner"
+
+// const Toaster = ({ ...props }: ToasterProps) => {
+//   return <Sonner className="toaster group" {...props} />
+// }
+
+// export { Toaster }
+
+
 "use client"
 
+import { useTheme } from "next-themes"
 import { Toaster as Sonner, type ToasterProps } from "sonner"
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  return <Sonner className="toaster group" {...props} />
+  const { resolvedTheme } = useTheme()
+
+  return (
+    <Sonner
+      theme={resolvedTheme === "dark" ? "dark" : "light"}
+      className="toaster group"
+      {...props}
+    />
+  )
 }
 
 export { Toaster }
