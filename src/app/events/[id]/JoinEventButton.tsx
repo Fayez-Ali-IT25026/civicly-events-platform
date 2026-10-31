@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Users } from "lucide-react";
 import { toast } from "sonner";
 
+import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 
 export default function JoinEventButton({
@@ -13,9 +14,18 @@ export default function JoinEventButton({
   eventId: string;
 }) {
   const router = useRouter();
+  const { data: session } = authClient.useSession();
   const [loading, setLoading] = useState(false);
 
   const handleJoin = async () => {
+    if (!session?.user) {
+      toast.error("Please login to join this event");
+      router.push(
+        `/login?callbackURL=${encodeURIComponent(`/events/${eventId}`)}`
+      );
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -23,7 +33,12 @@ export default function JoinEventButton({
         `${process.env.NEXT_PUBLIC_API_URL}/events/${eventId}/join`,
         {
           method: "POST",
-          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: session.user.id,
+            userEmail: session.user.email,
+            userName: session.user.name,
+          }),
         }
       );
 

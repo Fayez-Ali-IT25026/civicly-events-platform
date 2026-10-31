@@ -8,6 +8,9 @@ import {
   Menu,
   X,
   LogOut,
+  CalendarPlus,
+  ClipboardList,
+  Users,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -32,7 +35,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-// Navigation links
+// Main navigation links
 const links = [
   { name: "Home", href: "/" },
   { name: "Upcoming Events", href: "/events" },
@@ -40,7 +43,26 @@ const links = [
   { name: "Gallery", href: "/gallery" },
 ];
 
-// User Profile Menu - Outside Navbar
+// Profile navigation links
+const profileLinks = [
+  {
+    name: "Create Event",
+    href: "/create-event",
+    icon: CalendarPlus,
+  },
+  {
+    name: "Manage Events",
+    href: "/manage-events",
+    icon: ClipboardList,
+  },
+  {
+    name: "Joined Events",
+    href: "/joined-events",
+    icon: Users,
+  },
+];
+
+// User Profile Menu Props
 type ProfileMenuProps = {
   user: {
     name?: string | null;
@@ -50,7 +72,17 @@ type ProfileMenuProps = {
   onSignOut: () => void;
 };
 
-const ProfileMenu = ({ user, onSignOut }: ProfileMenuProps) => {
+// User Profile Menu
+const ProfileMenu = ({
+  user,
+  onSignOut,
+}: ProfileMenuProps) => {
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
   return (
     <Popover>
       <PopoverTrigger
@@ -59,6 +91,7 @@ const ProfileMenu = ({ user, onSignOut }: ProfileMenuProps) => {
           <button
             type="button"
             aria-label="Open profile menu"
+            title={user.name ?? "User Profile"}
             className="rounded-full outline-none ring-offset-2 transition hover:ring-2 hover:ring-[#8be37a]"
           >
             <Avatar className="h-9 w-9 border border-emerald-500/30">
@@ -66,6 +99,7 @@ const ProfileMenu = ({ user, onSignOut }: ProfileMenuProps) => {
                 src={user.image ?? ""}
                 referrerPolicy="no-referrer"
               />
+
               <AvatarFallback className="bg-[#8be37a] font-semibold text-[#062b20]">
                 {user.name?.charAt(0)?.toUpperCase() ?? "U"}
               </AvatarFallback>
@@ -78,6 +112,7 @@ const ProfileMenu = ({ user, onSignOut }: ProfileMenuProps) => {
         align="end"
         className="w-64 border border-white/10 bg-[#052b23] text-white"
       >
+        {/* User Information */}
         <PopoverHeader>
           <PopoverTitle className="text-white">
             {user.name ?? "User"}
@@ -90,6 +125,31 @@ const ProfileMenu = ({ user, onSignOut }: ProfileMenuProps) => {
 
         <div className="my-2 h-px bg-white/10" />
 
+        {/* Profile Navigation */}
+        <div className="flex flex-col gap-1">
+          {profileLinks.map((link) => {
+            const Icon = link.icon;
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition ${
+                  isActive(link.href)
+                    ? "bg-[#8be37a]/10 text-[#8be37a]"
+                    : "text-gray-300 hover:bg-white/10 hover:text-[#8be37a]"
+                }`}
+              >
+                <Icon size={17} />
+                {link.name}
+              </Link>
+            );
+          })}
+        </div>
+
+        <div className="my-2 h-px bg-white/10" />
+
+        {/* Sign Out */}
         <Button
           variant="destructive"
           className="w-full gap-2"
@@ -110,12 +170,13 @@ const Navbar = () => {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Better Auth session
-  const { data: session, isPending } = authClient.useSession();
+  // Better Auth Session
+  const { data: session, isPending } =
+    authClient.useSession();
 
   const user = session?.user;
 
-  // Sign out
+  // Sign Out
   const handleSignOut = async () => {
     try {
       const { error } = await authClient.signOut();
@@ -126,6 +187,7 @@ const Navbar = () => {
       }
 
       setMenuOpen(false);
+
       router.push("/login");
       router.refresh();
     } catch (error) {
@@ -133,14 +195,19 @@ const Navbar = () => {
     }
   };
 
-  // Active route
+  // Check Active Route
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
+    if (href === "/") {
+      return pathname === "/";
+    }
 
-    return pathname === href || pathname.startsWith(`${href}/`);
+    return (
+      pathname === href ||
+      pathname.startsWith(`${href}/`)
+    );
   };
 
-  // Navigation links
+  // Render Main Navigation Links
   const renderLinks = (mobile = false) => (
     <>
       {links.map((link) => (
@@ -172,6 +239,7 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#021d18]/90 backdrop-blur-xl">
+
       <nav className="mx-auto flex h-[68px] max-w-[1400px] items-center justify-between px-6 lg:px-12">
 
         {/* Logo */}
@@ -204,6 +272,7 @@ const Navbar = () => {
             <Search size={18} strokeWidth={1.8} />
           </button>
 
+          {/* Authentication */}
           {isPending ? (
             <div className="h-9 w-9 animate-pulse rounded-full bg-white/10" />
           ) : user ? (
@@ -249,6 +318,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="border-t border-white/10 bg-[#021d18] px-6 py-5 md:hidden">
+
           <div className="flex flex-col gap-4">
 
             {/* Mobile Navigation */}
@@ -264,8 +334,10 @@ const Navbar = () => {
                 Loading account...
               </div>
             ) : user ? (
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-3">
+              <div className="flex flex-col gap-4">
+
+                {/* User Information */}
+                <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
                     <AvatarImage
                       src={user.image ?? ""}
@@ -288,11 +360,35 @@ const Navbar = () => {
                   </div>
                 </div>
 
+                {/* Mobile Profile Navigation */}
+                <div className="flex flex-col gap-1">
+                  {profileLinks.map((link) => {
+                    const Icon = link.icon;
+
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setMenuOpen(false)}
+                        className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm transition ${
+                          isActive(link.href)
+                            ? "bg-[#8be37a]/10 text-[#8be37a]"
+                            : "text-gray-300 hover:bg-white/10 hover:text-[#8be37a]"
+                        }`}
+                      >
+                        <Icon size={17} />
+                        {link.name}
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                {/* Mobile Sign Out */}
                 <Button
                   variant="destructive"
                   size="sm"
                   onClick={handleSignOut}
-                  className="shrink-0 gap-2"
+                  className="w-full gap-2"
                 >
                   <LogOut size={15} />
                   Sign Out

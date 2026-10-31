@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import JoinEventButton from "./JoinEventButton";
 
 import type { Event } from "@/types/event";
+import EventOwnerActions from "./EventOwnerActions";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -204,6 +205,10 @@ export default async function EventDetailsPage({ params }: Props) {
               <div className="my-6 border-t" />
 
               <JoinEventButton eventId={event._id} />
+              <EventOwnerActions
+  eventId={event._id}
+  createdBy={event.createdBy}
+/>
 
               <p className="mt-4 text-center text-xs text-gray-500">
                 Login is required to join this event.
