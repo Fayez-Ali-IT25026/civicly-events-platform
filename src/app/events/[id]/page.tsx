@@ -8,8 +8,6 @@ import {
   MapPin,
   UserRound,
   ArrowLeft,
-  Clock,
-  Share2,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -46,7 +44,7 @@ async function EventDetails({ params }: Props) {
 
   if (!event) notFound();
 
-  const eventDate = new Date(event.eventDate);
+  const eventDate = new Date(`${event.eventDate}T00:00:00`);
 
   const formattedDate = eventDate.toLocaleDateString("en-BD", {
     day: "numeric",
@@ -54,10 +52,6 @@ async function EventDetails({ params }: Props) {
     year: "numeric",
   });
 
-  const formattedTime = eventDate.toLocaleTimeString("en-BD", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -104,7 +98,7 @@ async function EventDetails({ params }: Props) {
             {/* Event Information */}
             <section className="grid gap-4 sm:grid-cols-2">
 
-              <div className="flex items-center gap-4 rounded-xl border bg-white p-5 dark:bg-gray-900">
+              <div className="flex items-center gap-4 rounded-xl border bg-white p-5 dark:bg-gray-900 sm:col-span-2">
                 <div className="rounded-lg bg-green-100 p-3 text-green-700 dark:bg-green-950 dark:text-green-400">
                   <CalendarDays size={23} />
                 </div>
@@ -115,16 +109,6 @@ async function EventDetails({ params }: Props) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 rounded-xl border bg-white p-5 dark:bg-gray-900">
-                <div className="rounded-lg bg-green-100 p-3 text-green-700 dark:bg-green-950 dark:text-green-400">
-                  <Clock size={23} />
-                </div>
-
-                <div>
-                  <p className="text-sm text-gray-500">Event Time</p>
-                  <p className="font-semibold">{formattedTime}</p>
-                </div>
-              </div>
 
               <div className="flex items-center gap-4 rounded-xl border bg-white p-5 dark:bg-gray-900 sm:col-span-2">
                 <div className="rounded-lg bg-green-100 p-3 text-green-700 dark:bg-green-950 dark:text-green-400">

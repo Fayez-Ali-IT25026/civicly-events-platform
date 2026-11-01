@@ -181,3 +181,7 @@
   :where(.dark) .border-gray-200,
   :where(.dark) .border-gray-300 { border-color: rgb(255 255 255 / 0.12); }
 }
+
+.dark select {
+  color-scheme: dark;
+}

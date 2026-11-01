@@ -9,6 +9,7 @@ import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import gettokenfromclient from "@/lib/gettokenfromclient";
 
 const eventTypes = [
   "Cleanup",
@@ -87,16 +88,23 @@ export default function CreateEventPage() {
     try {
       setLoading(true);
 
+      const token = await gettokenfromclient();
+
+      if (!token) {
+        throw new Error("Please login again.");
+      }
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/events`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+             authorization: `Bearer ${token}`
           },
           body: JSON.stringify({
             ...formData,
-            createdBy: session.user.email,
+            // createdBy: session.user.email,
           }),
         }
       );
@@ -109,7 +117,7 @@ export default function CreateEventPage() {
 
       toast.success("Event created successfully!");
 
-      router.push("/manage-events");
+      router.push("/events");
       router.refresh();
     } catch (error) {
       console.error("Create event error:", error);
@@ -212,21 +220,27 @@ export default function CreateEventPage() {
                 Event Type
               </label>
 
-              <select
-                name="eventType"
-                value={formData.eventType}
-                onChange={handleChange}
-                required
-                className="w-full rounded-lg border bg-transparent px-4 py-3 outline-none focus:border-green-600"
-              >
-                <option value="">Select event type</option>
+             <select
+  name="eventType"
+  value={formData.eventType}
+  onChange={handleChange}
+  required
+  className="w-full rounded-lg border bg-white px-4 py-3 text-gray-900 outline-none focus:border-green-600 dark:bg-gray-900 dark:text-white"
+>
+  <option value="" className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
+    Select event type
+  </option>
 
-                {eventTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
+  {eventTypes.map((type) => (
+    <option
+      key={type}
+      value={type}
+      className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white"
+    >
+      {type}
+    </option>
+  ))}
+</select>
             </div>
 
             <div>

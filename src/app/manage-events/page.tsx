@@ -19,6 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import gettokenfromclient from "@/lib/gettokenfromclient";
 
 const ManageEventsPage = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -37,10 +38,17 @@ const ManageEventsPage = () => {
     if (!email) return;
 
     const loadEvents = async () => {
+
+ const token = await gettokenfromclient();
+
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/events?createdBy=${encodeURIComponent(email)}`,
-          { cache: "no-store" }
+          { cache: "no-store" ,
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (!res.ok) throw new Error("Failed to load your events.");
@@ -68,32 +76,44 @@ const ManageEventsPage = () => {
   }, [email]);
 
   const handleDelete = async () => {
-    if (!deleteId) return;
+  if (!deleteId) return;
 
-    try {
-      setDeleting(true);
+  try {
+    setDeleting(true);
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/events/${deleteId}?createdBy=${encodeURIComponent(email ?? "")}`,
-        { method: "DELETE" }
-      );
+    const token = await gettokenfromclient();
 
-      if (!res.ok) {
-        const result = await res.json();
-        throw new Error(result.message || "Failed to delete event.");
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${deleteId}`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       }
+    );
 
-      setEvents((prev) => prev.filter((event) => event._id !== deleteId));
-      toast.success("Event deleted successfully!");
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Something went wrong."
-      );
-    } finally {
-      setDeleting(false);
-      setDeleteId(null);
+    if (!res.ok) {
+      const result = await res.json();
+      throw new Error(result.message || "Failed to delete event.");
     }
-  };
+
+    setEvents((prev) =>
+      prev.filter((event) => event._id !== deleteId)
+    );
+
+    toast.success("Event deleted successfully!");
+  } catch (error) {
+    toast.error(
+      error instanceof Error
+        ? error.message
+        : "Something went wrong."
+    );
+  } finally {
+    setDeleting(false);
+    setDeleteId(null);
+  }
+};
 
   const formatDate = (date: string) =>
     new Date(`${date}T00:00:00`).toLocaleDateString("en-BD", {

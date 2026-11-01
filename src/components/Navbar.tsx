@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -91,7 +90,6 @@ const ProfileMenu = ({
   return (
     <Popover>
       <PopoverTrigger
-        nativeButton={false}
         render={
           <button
             type="button"

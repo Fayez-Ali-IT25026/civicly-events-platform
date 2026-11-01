@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import gettokenfromclient from "@/lib/gettokenfromclient";
 
 import {
   CalendarDays,
@@ -87,12 +88,18 @@ function EditEventForm() {
       try {
         setFetching(true);
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/events/${eventId}`,
-          {
-            cache: "no-store",
-          }
-        );
+       const token = await gettokenfromclient();
+
+if (!token) {
+  throw new Error("Please login again. Authentication token not found.");
+}
+
+const response = await fetch(
+  `${process.env.NEXT_PUBLIC_API_URL}/events/${eventId}`,
+  {
+    cache: "no-store",
+  }
+);
 
         const result: EventData = await response.json();
 
@@ -167,16 +174,23 @@ function EditEventForm() {
     try {
       setLoading(true);
 
+      const token = await gettokenfromclient();
+
+      if (!token) {
+        throw new Error("Please login again.");
+      }
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/events/${eventId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             ...formData,
-            createdBy: session?.user?.email,
+            // createdBy: session?.user?.email,
           }),
         }
       );
