@@ -302,10 +302,18 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu Toggle */}
-       <div className="flex items-center gap-3 md:hidden">
+       {/* Mobile Menu Toggle */}
+<div className="flex items-center gap-3 md:hidden">
   <ThemeToggle />
-  {/* the existing menu toggle <button> goes here, and remove "md:hidden" from its className */}
+  <button
+    type="button"
+    onClick={() => setMenuOpen((prev) => !prev)}
+    aria-label={menuOpen ? "Close menu" : "Open menu"}
+    aria-expanded={menuOpen}
+    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-gray-300 transition hover:border-[#8be37a] hover:text-[#8be37a]"
+  >
+    {menuOpen ? <X size={18} /> : <Menu size={18} />}
+  </button>
 </div>
       </nav>
 
