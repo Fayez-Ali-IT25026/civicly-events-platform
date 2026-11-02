@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 type Photo = {
   id: number;
@@ -51,12 +52,12 @@ const Gallery = () => {
               Real people. Real stories. Real change.
             </p>
           </div>
-          <a
-            href="#"
-            className="hidden items-center gap-1 text-sm font-medium text-[#062b20] hover:underline dark:text-white sm:flex"
-          >
-            View More Photos <ArrowRight size={14} />
-          </a>
+          <Link
+  href="/gallery"
+  className="hidden items-center gap-1 text-sm font-medium text-[#062b20] hover:underline dark:text-white sm:flex"
+>
+  View More Photos <ArrowRight size={14} />
+</Link>
         </div>
 
         <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
