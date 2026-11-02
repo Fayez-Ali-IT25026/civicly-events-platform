@@ -4,8 +4,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Event } from "@/types/event";
 import EventCard from "@/components/events/EventCard";
 
+
 async function getEvents(): Promise<Event[]> {
-  // Wait for a real request, so this fetch is not run during prerender
+ 
   await connection();
 
   try {
