@@ -42,7 +42,7 @@ Civicly is a community-driven platform where people can create, join and track s
 
    ```bash
    git clone https://github.com/Fayez-Ali-IT25026/civicly-events-platform
-   cd YOUR-CLIENT-REPO
+   cd civicly-events-platform
    npm install
    ```
 
