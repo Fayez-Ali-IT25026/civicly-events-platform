@@ -41,7 +41,7 @@ Civicly is a community-driven platform where people can create, join and track s
 1. Clone the repository and install dependencies:
 
    ```bash
-   git clone https://github.com/Fayez-Ali-IT25026/civicly-events-platform
+   git clone https://github.com/Fayez-Ali-IT25026/civicly-events-platform.git
    cd civicly-events-platform
    npm install
    ```
