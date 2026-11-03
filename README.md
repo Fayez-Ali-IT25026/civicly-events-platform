@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Civicly
+
+**Small Acts. Big Impact.**
+
+Civicly is a community-driven platform where people can create, join and track social service events in their local area, such as winter clothes distribution, blanket drives, tree plantation and cleanup campaigns.
+
+**Live Site:** https://civicly-events-platform.vercel.app/
+**Server Repository:** https://github.com/Fayez-Ali-IT25026/civicly-events-platform--server
+
+## Features
+
+- **Secure authentication**: register and log in with email and password (uppercase, lowercase and 6+ character validation) or with Google, powered by Better Auth.
+- **Create and manage events**: any logged-in user can create an event with a title, description, type, thumbnail, location and a future date, then update or delete their own events from the Manage Events page.
+- **Browse upcoming events**: a public page lists only upcoming events, and the home page shows the six nearest ones. Past events never appear.
+- **Join events with one click**: logged-in users can join an event from its details page. Duplicate joins are blocked, and joined events are listed by date on the Joined Events page.
+- **Protected APIs with JWT**: the Express server verifies a Better Auth JWT on every protected route, and only the creator of an event can edit or delete it.
+- **Light and dark theme**: switch themes with the toggle in the navbar.
+- **Responsive design**: works on mobile, tablet and desktop, with loading skeletons, toast messages and a custom 404 page.
+
+## Pages
+
+| Route | Access | Description |
+| --- | --- | --- |
+| `/` | Public | Banner, features, upcoming events, gallery and newsletter |
+| `/events` | Public | All upcoming events |
+| `/events/[id]` | Public | Event details and Join Event button |
+| `/login`, `/register` | Public | Authentication |
+| `/create-event` | Private | Create a new event |
+| `/manage-events` | Private | Update or delete your events |
+| `/joined-events` | Private | Events you have joined |
+| `/about`, `/gallery`, `/contact`, `/privacy`, `/terms` | Public | Information pages |
+
+## Tech Stack
+
+**Client:** Next.js (App Router), TypeScript, Tailwind CSS, shadcn/ui, Better Auth with the MongoDB adapter, Sonner, next-themes, Lucide icons
+
+**Server:** Express.js, MongoDB, jose (JWT verification), CORS
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository and install dependencies:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   git clone https://github.com/Fayez-Ali-IT25026/civicly-events-platform
+   cd YOUR-CLIENT-REPO
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run the development server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   ```bash
+   npm run dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Open http://localhost:3000.
 
-## Learn More
+The client needs the Civicly server running. See the server repository for its setup.
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Run the production build |
+| `npm run lint` | Run ESLint |
